@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/form";
 
 import { schema } from "./registrationSchema";
+import { onFormData } from "./RegistrationActions";
 
 export const RegistrationForm = () => {
   const form = useForm<z.infer<typeof schema>>({
@@ -36,9 +37,29 @@ export const RegistrationForm = () => {
       .then((data) => console.log(data));
   };
 
+  const onSubmit2 = async (data: z.infer<typeof schema>) => {
+    const formData = new FormData();
+    formData.append("first", data.first);
+    formData.append("last", data.last);
+    formData.append("email", data.email);
+    fetch("/api/registerForm", {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => console.log(data));
+  };
+
+  const onSubmit3 = async (data: z.infer<typeof schema>) => {
+    const result = await onFormData(data);
+    console.log(result);
+  };
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      {/* <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8"> */}
+      {/* <form onSubmit={form.handleSubmit(onSubmit2)} className="space-y-8"> */}
+      <form onSubmit={form.handleSubmit(onSubmit3)} className="space-y-8">
         <div className="flex gap-2">
           <FormField
             control={form.control}
