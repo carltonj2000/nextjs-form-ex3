@@ -15,9 +15,13 @@ import {
 } from "@/components/ui/form";
 
 import { schema } from "./registrationSchema";
-import { onFormData } from "./RegistrationActions";
+import { onJsonData } from "./RegistrationActions";
 
-export const RegistrationForm = () => {
+export const RegistrationForm = ({
+  onFormData,
+}: {
+  onFormData?: (data: any) => Promise<void>;
+}) => {
   const form = useForm<z.infer<typeof schema>>({
     defaultValues: {
       first: "",
@@ -51,7 +55,20 @@ export const RegistrationForm = () => {
   };
 
   const onSubmit3 = async (data: z.infer<typeof schema>) => {
-    const result = await onFormData(data);
+    const result = await onJsonData(data);
+    console.log(result);
+  };
+
+  const onSubmit4 = async (data: z.infer<typeof schema>) => {
+    const formData = new FormData();
+    formData.append("first", data.first);
+    formData.append("last", data.last);
+    formData.append("email", data.email);
+    if (!onFormData) {
+      console.log("onFormData not defined");
+      return;
+    }
+    const result = await onFormData(formData);
     console.log(result);
   };
 
@@ -59,7 +76,8 @@ export const RegistrationForm = () => {
     <Form {...form}>
       {/* <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8"> */}
       {/* <form onSubmit={form.handleSubmit(onSubmit2)} className="space-y-8"> */}
-      <form onSubmit={form.handleSubmit(onSubmit3)} className="space-y-8">
+      {/* <form onSubmit={form.handleSubmit(onSubmit3)} className="space-y-8"> */}
+      <form onSubmit={form.handleSubmit(onSubmit4)} className="space-y-8">
         <div className="flex gap-2">
           <FormField
             control={form.control}
