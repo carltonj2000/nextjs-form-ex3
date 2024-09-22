@@ -17,9 +17,29 @@ export default function Home() {
       return { error: parsed.error };
     }
   }
+  async function onFormDataState(
+    previousState: { message: string },
+    formData: FormData
+  ) {
+    "use server";
+    const data = Object.fromEntries(formData);
+    const parsed = schema.safeParse(data);
+    if (parsed.success) {
+      // Add data to the database
+      return {
+        message: "User registered via server action and form data",
+        data: parsed.data,
+      };
+    } else {
+      return { error: parsed.error };
+    }
+  }
   return (
     <div className="mx-auto max-w-xl">
-      <RegistrationForm onFormData={onFormData} />
+      <RegistrationForm
+        onFormData={onFormData}
+        onFormDataState={onFormDataState}
+      />
     </div>
   );
 }

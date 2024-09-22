@@ -1,4 +1,5 @@
 "use client";
+import { useFormState } from "react-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -19,9 +20,15 @@ import { onJsonData } from "./RegistrationActions";
 
 export const RegistrationForm = ({
   onFormData,
+  onFormDataState,
 }: {
-  onFormData?: (data: any) => Promise<void>;
+  onFormData?: (data: FormData) => Promise<void>;
+  onFormDataState?: (
+    state: { message: string },
+    data: FormData
+  ) => Promise<void>;
 }) => {
+  const [state, formAction] = useFormState(onFormDataState, { message: "" });
   const form = useForm<z.infer<typeof schema>>({
     defaultValues: {
       first: "",
