@@ -17,6 +17,7 @@ import {
 
 import { schema } from "./registrationSchema";
 import { onJsonData } from "./RegistrationActions";
+import { useRef } from "react";
 
 export const RegistrationForm = ({
   onFormData,
@@ -24,9 +25,9 @@ export const RegistrationForm = ({
 }: {
   onFormData?: (data: FormData) => Promise<void>;
   onFormDataState?: (
-    state: { message: string },
-    data: FormData
-  ) => Promise<void>;
+    previousState: { message: string },
+    formData: FormData
+  ) => Promise<{ message?: string; data?: any; error?: string }>;
 }) => {
   const [state, formAction] = useFormState(onFormDataState, { message: "" });
   const form = useForm<z.infer<typeof schema>>({
@@ -79,12 +80,20 @@ export const RegistrationForm = ({
     console.log(result);
   };
 
+  const formRef = useRef<HTMLFormElement>(null);
   return (
     <Form {...form}>
+      <div>{state?.message}</div>
       {/* <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8"> */}
       {/* <form onSubmit={form.handleSubmit(onSubmit2)} className="space-y-8"> */}
       {/* <form onSubmit={form.handleSubmit(onSubmit3)} className="space-y-8"> */}
-      <form onSubmit={form.handleSubmit(onSubmit4)} className="space-y-8">
+      {/* <form onSubmit={form.handleSubmit(onSubmit4)} className="space-y-8"> */}
+      <form
+        ref={formRef}
+        action={formAction}
+        onSubmit={form.handleSubmit(() => formRef.current?.submit())}
+        className="space-y-8"
+      >
         <div className="flex gap-2">
           <FormField
             control={form.control}

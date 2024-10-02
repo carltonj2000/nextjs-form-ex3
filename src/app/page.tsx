@@ -1,5 +1,4 @@
 import { RegistrationForm } from "./RegistrationForm";
-import { z } from "zod";
 import { schema } from "./registrationSchema";
 
 export default function Home() {
