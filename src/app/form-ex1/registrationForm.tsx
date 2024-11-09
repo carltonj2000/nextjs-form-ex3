@@ -25,37 +25,42 @@ export const RegistrationForm = () => {
       email: "",
     },
   });
+  const onSubmit = async (data: SchemaT) => {
+    console.log(data);
+  };
   return (
     <Form {...form}>
-      <form className="space-y-2">
-        <FormField
-          control={form.control}
-          name="first"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>First</FormLabel>
-              <FormControl>
-                <Input placeholder="" {...field} />
-              </FormControl>
-              <FormDescription>Your first name</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="last"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Last</FormLabel>
-              <FormControl>
-                <Input placeholder="" {...field} />
-              </FormControl>
-              <FormDescription>Your last name</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+        <div className="flex gap-2">
+          <FormField
+            control={form.control}
+            name="first"
+            render={({ field }) => (
+              <FormItem className="flex-1">
+                <FormLabel>First</FormLabel>
+                <FormControl>
+                  <Input placeholder="" {...field} />
+                </FormControl>
+                <FormDescription>Your first name</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="last"
+            render={({ field }) => (
+              <FormItem className="flex-1">
+                <FormLabel>Last</FormLabel>
+                <FormControl>
+                  <Input placeholder="" {...field} />
+                </FormControl>
+                <FormDescription>Your last name</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
         <FormField
           control={form.control}
           name="email"
